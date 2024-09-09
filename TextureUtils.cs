@@ -14,7 +14,7 @@ public class TextureUtils
         RenderTexture cachedRt = RenderTexture.active;
 
         RenderTexture rt = new RenderTexture(newX, newY, 24);
-        Texture2D result = new Texture2D(newX, newY, source.format, source.mipmapCount > 0);
+        Texture2D result = new Texture2D(newX, newY, source.format, source.mipmapCount > 1);
         rt.filterMode = source.filterMode;
         result.wrapMode = source.wrapMode;
 
@@ -37,14 +37,16 @@ public class TextureUtils
     {
         int oldResolution = source.width;
 
-        int nextPowerOfTwo = 2;
-        while (oldResolution >= nextPowerOfTwo + 1) nextPowerOfTwo *= 2;
+        int nextPowerOfTwo = Mathf.NextPowerOfTwo(oldResolution);
 
-        int newResolutionLower = nextPowerOfTwo / 2 + 1;
+        int newResolutionLower = (nextPowerOfTwo / 2) + 1;
         int newResolutionUpper = nextPowerOfTwo + 1;
 
         int distanceToLower = Mathf.Abs(oldResolution - newResolutionLower);
         int distanceToUpper = Mathf.Abs(oldResolution - newResolutionUpper);
+
+        if (oldResolution == newResolutionLower || oldResolution == newResolutionUpper)
+            return source; // No need to resize
 
         if (distanceToLower < distanceToUpper) return Resize(source, newResolutionLower, newResolutionLower);
         else return Resize(source, newResolutionUpper, newResolutionUpper);
