@@ -36,7 +36,6 @@ public class TextureUtils
     public static Texture2D FitTerrain(Texture2D source)
     {
         int oldResolution = source.width;
-
         int nextPowerOfTwo = Mathf.NextPowerOfTwo(oldResolution);
 
         int newResolutionLower = (nextPowerOfTwo / 2) + 1;
@@ -47,7 +46,7 @@ public class TextureUtils
 
         if (oldResolution == newResolutionLower || oldResolution == newResolutionUpper)
             return source; // No need to resize
-
+  
         if (distanceToLower < distanceToUpper) return Resize(source, newResolutionLower, newResolutionLower);
         else return Resize(source, newResolutionUpper, newResolutionUpper);
     }
